@@ -1,0 +1,14 @@
+{% extends 'main/shablon.html' %}
+
+
+{% block content %}
+
+    {% if object %}
+        <form method='POST' action='.'>
+            {% csrf_token %}
+            <p>Вы уверены, что хотите удалить {{ object.name }}</p>
+            <button type='submit'>Да, уверен.</button>
+        </form>
+    {% endif %}
+
+{% endblock content %}

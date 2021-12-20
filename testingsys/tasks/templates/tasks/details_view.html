@@ -1,0 +1,56 @@
+{% extends 'main/shablon.html' %}
+
+{% block title %}
+Задача
+{% endblock %}
+
+{% block content %}
+    <div class="module-detail-description">
+        <h3>{{object.name}}</h3>
+        <h5>{{object.description|linebreaks}}</h5>
+    </div>
+
+    <div class="detail-all-task">
+        {% for el in object.task_set.all %}
+            <div class="detail-description-task">
+                <h5>{{el.name}}</h5>
+                <div>{{el.condition|linebreaks}}</div>
+                {% if is_author %}
+                    <div>{{el.answer}}</div>
+                {% endif %}
+                <input style="width: 400px;">
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if object.task_set.all %}
+        <button id="switch">Проверить</button>
+    {% endif %}
+    <br>
+    <span id="finish"></span>
+
+
+    {% if is_author %}
+        <a href="{% url 'tasks_edit' object.id %}"><span>Изменить</span></a>
+        <a href="{% url 'module-delete' object.id %}"><span>Удалить</span></a>
+    {% endif %}
+
+
+    <script>
+        var a = document.getElementById('switch');
+        a.onclick = function() {
+            const js_answers = Array.from(document.querySelectorAll('input'), v=> v.value);
+            if (JSON.stringify({{ array| safe }}) === JSON.stringify(js_answers)) {
+                document.getElementById("finish").innerHTML = "Тест решен верно";
+                document.getElementById("finish").style.color="green";
+                document.getElementById("finish").style.fontSize=26+"px";
+            } else {
+                document.getElementById("finish").innerHTML = "Тест решен неверно";
+                document.getElementById("finish").style.color="red";
+                document.getElementById("finish").style.fontSize=26+"px";
+            }
+
+        }
+    </script>
+{% endblock %}
+
